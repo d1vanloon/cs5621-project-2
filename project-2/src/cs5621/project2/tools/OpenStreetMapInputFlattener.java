@@ -102,16 +102,22 @@ public class OpenStreetMapInputFlattener {
 					if (trimmedLine.startsWith(WAY_END)) {
 						// Only if the current way is a road
 						if (isRoad) {
+							// Start indexing nodes at 0
+							int nodeIndex = 0;
 							// For each node
 							while (!currentWayNodes.isEmpty()) {
 								// Get the node and remove it from the list
 								String node = currentWayNodes.removeFirst();
 								// Output the node with the way data in front
 								// and the way tags behind
-								out.write((currentWayAttributes + " " + node + currentWayTags)
+								// Also include the node index for ordering
+								out.write((currentWayAttributes + " index="
+										+ nodeIndex + " " + node + currentWayTags)
 										.getBytes());
 								// ... and a new line
 								out.write(System.lineSeparator().getBytes());
+								// Increment the node index
+								nodeIndex++;
 							}
 						} else {
 							// If the current way isn't a road, ignore it
