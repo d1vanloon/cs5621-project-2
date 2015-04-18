@@ -48,19 +48,36 @@ public class OpenStreetMapInputFlattener {
 
 	/**
 	 * Flattens the input file into the output file.
+	 * 
+	 * @return the number of lines processed
 	 */
-	public void flatten() {
-		for (int x = 0; x < 2; x++) {
+	public int flatten() {
+		int processedLines = 0;
+		currentLine = "";
+
+		// Stream through the file until a way is encountered
+		while (!currentLine.startsWith("<way")) {
 			try {
+				// Read a line
 				currentLine = reader.readLine();
-				System.out.println("Read: " + currentLine);
+				// Exit the loop if there are no more lines remaining
+				if (currentLine == null) {
+					break;
+				}
+				// ... and immediately write it to the output file
 				out.write(currentLine.getBytes());
-				System.out.println("Output.");
+				// With a new line for good measure
+				out.write(System.lineSeparator().getBytes());
 				out.flush();
+				// Increment the number of processed lines
+				processedLines++;
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+
+		return processedLines;
 	}
 
 	/**
@@ -73,7 +90,9 @@ public class OpenStreetMapInputFlattener {
 		File inputFile = new File(args[0]);
 		File outputFile = new File(args[1]);
 		try {
-			new OpenStreetMapInputFlattener(inputFile, outputFile).flatten();
+			System.out.println("Processed lines: "
+					+ new OpenStreetMapInputFlattener(inputFile, outputFile)
+							.flatten());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
