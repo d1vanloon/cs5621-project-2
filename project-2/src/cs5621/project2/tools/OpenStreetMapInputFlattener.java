@@ -62,12 +62,20 @@ public class OpenStreetMapInputFlattener {
 	/**
 	 * Flattens the input file into the output file.
 	 * 
+	 * This process removes all ways that are not roads. Ways that represent
+	 * roads are stripped so that the outer way tags are removed and each node
+	 * line is prepended with the opening way tag and appended with the name
+	 * and/or highway tags.
+	 * 
 	 * @return the number of lines processed
 	 */
 	public int flatten() {
 		int processedLines = 0;
 		currentLine = "";
+		// Track if we're processing a way
 		boolean inWay = false;
+		// Track if the current way is a road
+		boolean isRoad = false;
 		String trimmedLine;
 
 		try {
@@ -86,6 +94,8 @@ public class OpenStreetMapInputFlattener {
 									.contains(K_NAME))) {
 						// Append the tag to the current way tags
 						currentWayTags += " " + trimmedLine;
+						// Mark if the current way is a road
+						isRoad = trimmedLine.contains(K_HIGHWAY);
 					} else
 					// If the current line is the end of the way
 					if (trimmedLine.startsWith(WAY_END)) {
@@ -96,10 +106,13 @@ public class OpenStreetMapInputFlattener {
 							// Output the node with the way data in front and
 							// the way tags
 							// behind
-							out.write((currentWayAttributes + " " + node + currentWayTags)
-									.getBytes());
-							// ... and a new line
-							out.write(System.lineSeparator().getBytes());
+							// Only if the current way is a road
+							if (isRoad) {
+								out.write((currentWayAttributes + " " + node + currentWayTags)
+										.getBytes());
+								// ... and a new line
+								out.write(System.lineSeparator().getBytes());
+							}
 						}
 						// We're done with the way
 						inWay = false;
@@ -113,6 +126,8 @@ public class OpenStreetMapInputFlattener {
 					currentWayAttributes = trimmedLine;
 					// We're now processing a way
 					inWay = true;
+					// Assume it isn't a road until told otherwise
+					isRoad = false;
 				} else
 				// If we're looking at any other line
 				{
@@ -126,7 +141,7 @@ public class OpenStreetMapInputFlattener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Flush the output buffer
 		try {
 			out.flush();
