@@ -99,20 +99,22 @@ public class OpenStreetMapInputFlattener {
 					} else
 					// If the current line is the end of the way
 					if (trimmedLine.startsWith(WAY_END)) {
-						// For each node
-						while (!currentWayNodes.isEmpty()) {
-							// Get the node and remove it from the list
-							String node = currentWayNodes.removeFirst();
-							// Output the node with the way data in front and
-							// the way tags
-							// behind
-							// Only if the current way is a road
-							if (isRoad) {
+						// Only if the current way is a road
+						if (isRoad) {
+							// For each node
+							while (!currentWayNodes.isEmpty()) {
+								// Get the node and remove it from the list
+								String node = currentWayNodes.removeFirst();
+								// Output the node with the way data in front
+								// and the way tags behind
 								out.write((currentWayAttributes + " " + node + currentWayTags)
 										.getBytes());
 								// ... and a new line
 								out.write(System.lineSeparator().getBytes());
 							}
+						} else {
+							// If the current way isn't a road, ignore it
+							currentWayNodes.clear();
 						}
 						// We're done with the way
 						inWay = false;
