@@ -42,6 +42,7 @@ public class OpenStreetMapInputFlattener {
 	 * @param inputFile
 	 *            the input file to read
 	 * @throws IOException
+	 *             if there's a problem accessing a file
 	 */
 	public OpenStreetMapInputFlattener(File inputFile, File outputFile)
 			throws IOException {
