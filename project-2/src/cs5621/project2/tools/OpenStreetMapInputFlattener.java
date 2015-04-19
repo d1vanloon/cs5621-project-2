@@ -70,8 +70,8 @@ public class OpenStreetMapInputFlattener {
 	 * 
 	 * @return the number of lines processed
 	 */
-	public int flatten() {
-		int processedLines = 0;
+	public long flatten() {
+		long processedLines = 0;
 		currentLine = "";
 		// Track if we're processing a way
 		boolean inWay = false;
