@@ -18,8 +18,11 @@ import org.apache.hadoop.mapreduce.Mapper;
  */
 public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 
-	/* (non-Javadoc)
-	 * @see org.apache.hadoop.mapreduce.Mapper#map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper.Context)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.hadoop.mapreduce.Mapper#map(java.lang.Object,
+	 * java.lang.Object, org.apache.hadoop.mapreduce.Mapper.Context)
 	 */
 	@Override
 	protected void map(LongWritable key, Text value,
