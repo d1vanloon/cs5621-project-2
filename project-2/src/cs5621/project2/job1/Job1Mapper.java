@@ -28,6 +28,46 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	protected void map(LongWritable key, Text value,
 			Mapper<LongWritable, Text, LongWritable, Text>.Context context)
 			throws IOException, InterruptedException {
+		
+		/*
+		 * Input: 
+		 * 
+		 * Interesting data is in the following format(s):
+		 * 
+		 * <node id="19193953" version="2" timestamp="2012-03-30T16:43:55Z" uid="10786" user="stucki1" changeset="11157125" lat="46.858986" lon="-91.234218"/>
+		 * <way id="18248027" version="4" timestamp="2015-03-31T04:46:02Z" uid="97431" user="Dion Dock" changeset="29867642"> index=5 <nd ref="188137163"/> <tag k="name" v="Plum Street"/> <tag k="highway" v="residential"/>
+		 * 
+		 * Generally:
+		 * <node id="{node id}" version="2" timestamp="2012-03-30T16:43:55Z" uid="10786" user="stucki1" changeset="11157125" lat="{latitude}" lon="{longitude}"/>
+		 * <way id="{way id}" version="4" timestamp="2015-03-31T04:46:02Z" uid="97431" user="Dion Dock" changeset="29867642"> index={node index} <nd ref="{node id}"/> <tag k="name" v="{road name}"/> <tag k="highway" v="residential"/>
+		 * 
+		 * Uninteresting data that is similar:
+		 * </node>
+		 * <relation id="116017" version="159" timestamp="2015-01-07T17:20:27Z" uid="1376118" user="ChrisZontine" changeset="27980825">
+		 * <member type="way" ref="186409174" role="forward"/>
+		 * </relation>
+		 * 
+		 * For lines beginning with "<node":
+		 *  - The <node id> is the value between "id=\"" and the next "\""
+		 *  - The <latitude> is the value between "lat=\"" and the next "\""
+		 *  - The <longitude> is the value between "lon=\"" and the next "\""
+		 *  
+		 * For lines beginning with "<way":
+		 *  - The <node id> is the value between "ref=\"" and the next "\""
+		 *  - The <way id> is the value between "way id=\"" and the next "\""
+		 *  - The <node index> is the integer value directly following "index="
+		 *  - The <road name> is the value between "v=\"" and the next "\""
+		 * 
+		 * Output: 
+		 * 
+		 * Key: <node id> (as LongWritable)
+		 * Value: "<latitude> <longitude>" OR "<way id> <node index> [road~name]"
+		 * 
+		 * Where names in <> are replaced with values, names in [] are 
+		 * optionally replaced with values, and values are separated 
+		 * by spaces. The road name will have spaces replaced with '~'.
+		 */
+		
 		super.map(key, value, context);
 	}
 
