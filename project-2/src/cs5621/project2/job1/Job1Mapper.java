@@ -17,6 +17,18 @@ import org.apache.hadoop.mapreduce.Mapper;
  *
  */
 public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
+	
+	/**
+	 * Enumerated type defining a counter group and counters
+	 * for categorizing each input line.
+	 * @author David Van Loon
+	 *
+	 */
+	public static enum InputLineTypes {
+		NODE_DETAILS,
+		WAY_ENTRY,
+		NOT_USEFUL
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -61,12 +73,31 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 		 * Output: 
 		 * 
 		 * Key: <node id> (as LongWritable)
-		 * Value: "<latitude> <longitude>" OR "<way id> <node index> [road~name]"
+		 * Value: "<latitude> <longitude>" OR "way <way id> <node index> [road~name]"
 		 * 
 		 * Where names in <> are replaced with values, names in [] are 
 		 * optionally replaced with values, and values are separated 
 		 * by spaces. The road name will have spaces replaced with '~'.
 		 */
+		
+		// Get the line of input data
+		String line = value.toString();
+		
+		// Decide whether we're processing node details or a way entry
+		if (line.startsWith("<node")) {
+			// We're processing a line with node details
+			
+			// Increment the number of node details lines processed
+			context.getCounter(InputLineTypes.NODE_DETAILS).increment(1);
+		} else if (line.startsWith("<way")) {
+			// We're processing a line with a way entry
+			
+			// Increment the number of way entry lines processed
+			context.getCounter(InputLineTypes.WAY_ENTRY).increment(1);
+		} else {
+			// We've got a line that is not useful - count it and disregard
+			context.getCounter(InputLineTypes.NOT_USEFUL).increment(1);
+		}
 		
 		super.map(key, value, context);
 	}
