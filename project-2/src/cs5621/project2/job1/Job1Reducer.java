@@ -35,7 +35,7 @@ public class Job1Reducer extends Reducer<LongWritable, Text, Text, Text> {
 			 }
 			 //newKey should contain WayID, Way Name, and the Node Index
 			 //newValue should contain Node Latitude, Node Longitude,  Node Index, and Intersection Flag
-			 Text newKey = new Text(wayInfo[0] + " " + wayInfo[3] + " " + wayInfo[2]);
+			 Text newKey = new Text(wayInfo[0] + wayInfo[3] + wayInfo[2]);
 			 Text newValue = new Text(wayInfo[4] + " " + wayInfo[5] + " " + wayInfo[2] + " " + wayInfo[6]);
 			 
 			 //Write the key values
