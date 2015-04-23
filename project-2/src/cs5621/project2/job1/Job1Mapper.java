@@ -4,6 +4,7 @@
 package cs5621.project2.job1;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -82,24 +83,195 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 		
 		// Get the line of input data
 		String line = value.toString();
-		
+
 		// Decide whether we're processing node details or a way entry
 		if (line.startsWith("<node")) {
 			// We're processing a line with node details
-			
+
+			// Extract the node ID
+			long nodeID = extractNodeIDFromNodeLine(line);
+
+			// Extract the latitude
+			String latitude = extractLatitude(line);
+
+			// Extract the longitude
+			String longitude = extractLongitude(line);
+
+			// Format the output value as "<latitude> <longitude>"
+			String outputValue = String
+					.format("%1$s %2$s", latitude, longitude);
+
+			// Write the key and value to the reducer
+			context.write(new LongWritable(nodeID), new Text(outputValue));
+
 			// Increment the number of node details lines processed
 			context.getCounter(InputLineTypes.NODE_DETAILS).increment(1);
 		} else if (line.startsWith("<way")) {
 			// We're processing a line with a way entry
+
+			// Extract the node ID
+			long nodeID = extractNodeIDFromWayLine(line);
+
+			// Extract the way ID
+			String wayID = extractWayID(line);
+
+			// Extract the node index
+			int nodeIndex = extractNodeIndex(line);
 			
+			// Extract the road name
+			String roadName = extractRoadName(line);
+			
+			// Format the output value as
+			// "way <way id> <node index> [road~name]"
+			String outputValue = (roadName == null ? String.format(
+					"way %1$s $2$d", wayID, nodeIndex) : String.format(
+					"way %1$s $2$d %3$s", wayID, nodeIndex, roadName));
+			
+			// Write the key and value to the reducer
+			context.write(new LongWritable(nodeID), new Text(outputValue));
+
 			// Increment the number of way entry lines processed
 			context.getCounter(InputLineTypes.WAY_ENTRY).increment(1);
 		} else {
 			// We've got a line that is not useful - count it and disregard
 			context.getCounter(InputLineTypes.NOT_USEFUL).increment(1);
 		}
-		
-		super.map(key, value, context);
+	}
+
+	/**
+	 * Extracts the longitude from an input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the longitude
+	 */
+	private String extractLongitude(String line) {
+		String attributeName = "lon";
+		return extractUniqueAttribute(line, attributeName);
+	}
+
+	/**
+	 * Extracts the value of an attribute from a line of input data.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @param attributeName
+	 *            the attribute name, e.g. "lat" or "lon"
+	 * @return the value of the attribute
+	 * @throws InputMismatchException
+	 *             if the attribute is not found in the input line
+	 */
+	private String extractUniqueAttribute(String line, String attributeName)
+			throws InputMismatchException {
+		// Record the size of the attribute name
+		int sizeOfAttributeName = attributeName.length();
+		// The index at which the attribute starts
+		int indexOfLonStart = line.indexOf(attributeName + "=\"")
+				+ sizeOfAttributeName + 1;
+		if (indexOfLonStart == -1) {
+			throw new InputMismatchException("Attribute \"" + attributeName
+					+ "\" does not exist in the input line.");
+		}
+		// The rest of the line
+		String subStringAfterLonStart = line.substring(line
+				.indexOf(attributeName + "=\"") + sizeOfAttributeName + 1);
+		// The index at which the attribute ends
+		int indexOfLonEnd = indexOfLonStart
+				+ subStringAfterLonStart.indexOf("\"");
+		// Extract the attribute from this substring
+		return line.substring(indexOfLonStart, indexOfLonEnd);
+	}
+
+	/**
+	 * Extracts the latitude from an input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the latitude
+	 */
+	private String extractLatitude(String line) {
+		String attributeName = "lat";
+		return extractUniqueAttribute(line, attributeName);
+	}
+
+	/**
+	 * Extracts the node ID from an node details input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the node ID
+	 * @throws NumberFormatException if there's an error parsing the data
+	 */
+	private long extractNodeIDFromNodeLine(String line)
+			throws NumberFormatException {
+		String attributeName = "id";
+		return Long.parseLong(extractUniqueAttribute(line, attributeName));
+	}
+
+	/**
+	 * Extracts the node ID from an way entry input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the node ID
+	 * @throws NumberFormatException if there's an error parsing the data
+	 */
+	private long extractNodeIDFromWayLine(String line)
+			throws NumberFormatException {
+		String attributeName = "ref";
+		return Long.parseLong(extractUniqueAttribute(line, attributeName));
+	}
+
+	/**
+	 * Extracts the way ID from an input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the way ID
+	 */
+	private String extractWayID(String line) {
+		String attributeName = "way id";
+		return extractUniqueAttribute(line, attributeName);
+	}
+
+	/**
+	 * Extracts the node index from an input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the node index
+	 * @throws NumberFormatException if there's an error parsing the data
+	 */
+	private int extractNodeIndex(String line) throws NumberFormatException {
+		String attributeName = "index=";
+		// Get the string starting at the end of the attribute name until the
+		// end of the line
+		String restOfLine = line.substring(line.indexOf(attributeName)
+				+ attributeName.length());
+		// Get the index of the next space
+		int indexOfNextSpace = restOfLine.indexOf(" ");
+		// Return the integer value
+		return Integer.parseInt(restOfLine.substring(0, indexOfNextSpace));
+	}
+	
+	/**
+	 * Extracts the road name from an input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the road name, or null if it does not exist in the input line
+	 */
+	private String extractRoadName(String line) {
+		String attributeName = "v";
+		try {
+			// Get the raw road name
+			String rawName = extractUniqueAttribute(line, attributeName);
+			// Return the road name with '~' in place of spaces
+			return rawName.replace(' ', '~');
+		} catch (InputMismatchException ex) {
+			// The road name was not included in the input line
+			return null;
+		}
 	}
 
 }
