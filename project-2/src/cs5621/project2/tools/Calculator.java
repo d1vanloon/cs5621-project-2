@@ -2,6 +2,9 @@ package cs5621.project2.tools;
 
 import java.lang.Math;
 
+/**
+ * @author Brad Cutshall
+ */
 public class Calculator {
 
     /**
@@ -17,8 +20,8 @@ public class Calculator {
     */
     public double latLongDistance(double point1[], double point2[]) {
         double distance = 0;
-        double earthRadius=20902230.97;
-        double mile=5280; // (Meters is 6371000)
+        double earthRadius=20902230.97; // Meters is 6371000
+        double mile=5280; 
 
         double aX = degToRadians(point1[0]);
         double aY = degToRadians(point1[1]);
