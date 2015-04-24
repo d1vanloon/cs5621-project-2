@@ -38,7 +38,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 * java.lang.Object, org.apache.hadoop.mapreduce.Mapper.Context)
 	 */
 	@Override
-	protected void map(LongWritable key, Text value,
+	public void map(LongWritable key, Text value,
 			Mapper<LongWritable, Text, LongWritable, Text>.Context context)
 			throws IOException, InterruptedException {
 		
@@ -145,7 +145,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 *            the input line
 	 * @return the longitude
 	 */
-	private String extractLongitude(String line) {
+	public String extractLongitude(String line) {
 		String attributeName = "lon";
 		return extractUniqueAttribute(line, attributeName);
 	}
@@ -161,25 +161,25 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 * @throws InputMismatchException
 	 *             if the attribute is not found in the input line
 	 */
-	private String extractUniqueAttribute(String line, String attributeName)
+	public String extractUniqueAttribute(String line, String attributeName)
 			throws InputMismatchException {
 		// Record the size of the attribute name
 		int sizeOfAttributeName = attributeName.length();
 		// The index at which the attribute starts
-		int indexOfLonStart = line.indexOf(attributeName + "=\"")
-				+ sizeOfAttributeName + 1;
-		if (indexOfLonStart == -1) {
+		int indexOfAttrStart = line.indexOf(attributeName + "=\"")
+				+ sizeOfAttributeName + 2;
+		if (indexOfAttrStart == -1) {
 			throw new InputMismatchException("Attribute \"" + attributeName
 					+ "\" does not exist in the input line.");
 		}
 		// The rest of the line
 		String subStringAfterLonStart = line.substring(line
-				.indexOf(attributeName + "=\"") + sizeOfAttributeName + 1);
+				.indexOf(attributeName + "=\"") + sizeOfAttributeName + 2);
 		// The index at which the attribute ends
-		int indexOfLonEnd = indexOfLonStart
+		int indexOfLonEnd = indexOfAttrStart
 				+ subStringAfterLonStart.indexOf("\"");
 		// Extract the attribute from this substring
-		return line.substring(indexOfLonStart, indexOfLonEnd);
+		return line.substring(indexOfAttrStart, indexOfLonEnd);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 *            the input line
 	 * @return the latitude
 	 */
-	private String extractLatitude(String line) {
+	public String extractLatitude(String line) {
 		String attributeName = "lat";
 		return extractUniqueAttribute(line, attributeName);
 	}
@@ -202,7 +202,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 * @return the node ID
 	 * @throws NumberFormatException if there's an error parsing the data
 	 */
-	private long extractNodeIDFromNodeLine(String line)
+	public long extractNodeIDFromNodeLine(String line)
 			throws NumberFormatException {
 		String attributeName = "id";
 		return Long.parseLong(extractUniqueAttribute(line, attributeName));
@@ -216,7 +216,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 * @return the node ID
 	 * @throws NumberFormatException if there's an error parsing the data
 	 */
-	private long extractNodeIDFromWayLine(String line)
+	public long extractNodeIDFromWayLine(String line)
 			throws NumberFormatException {
 		String attributeName = "ref";
 		return Long.parseLong(extractUniqueAttribute(line, attributeName));
@@ -229,7 +229,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 *            the input line
 	 * @return the way ID
 	 */
-	private String extractWayID(String line) {
+	public String extractWayID(String line) {
 		String attributeName = "way id";
 		return extractUniqueAttribute(line, attributeName);
 	}
@@ -242,7 +242,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 * @return the node index
 	 * @throws NumberFormatException if there's an error parsing the data
 	 */
-	private int extractNodeIndex(String line) throws NumberFormatException {
+	public int extractNodeIndex(String line) throws NumberFormatException {
 		String attributeName = "index=";
 		// Get the string starting at the end of the attribute name until the
 		// end of the line
@@ -261,7 +261,7 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 	 *            the input line
 	 * @return the road name, or null if it does not exist in the input line
 	 */
-	private String extractRoadName(String line) {
+	public String extractRoadName(String line) {
 		String attributeName = "v";
 		try {
 			// Get the raw road name
@@ -273,5 +273,5 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 			return null;
 		}
 	}
-
+	
 }
