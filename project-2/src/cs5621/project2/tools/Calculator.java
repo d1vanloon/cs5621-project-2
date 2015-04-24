@@ -31,10 +31,10 @@ public class Calculator {
         distance = 2*earthRadius*Math.asin
         (
             Math.sqrt(
-                    haversin(bX, aX)
-                    +( 
-                            Math.cos(aX) * Math.cos(bX) * haversin(bY, aY) 
-                    )
+                haversin(bX, aX)
+                +( 
+                        Math.cos(aX) * Math.cos(bX) * haversin(bY, aY) 
+                )
             )
         );
         return (distance/mile); 
