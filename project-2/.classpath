@@ -17,5 +17,6 @@
 			<attribute name="javadoc_location" value="http://hadoop.apache.org/docs/current/api/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
