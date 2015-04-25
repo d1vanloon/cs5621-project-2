@@ -23,14 +23,18 @@ public class Job1MapperTest {
 			+ "lat=\"46.846285\" lon=\"-91.24682\"/>";
 	String nodeInputLineLongitude = "-91.24682";
 	String nodeInputLineLatitude = "46.846285";
+	long nodeInputLineNodeID = 19193992;
 	
-	/**
-	 * Test method for {@link cs5621.project2.job1.Job1Mapper#map(org.apache.hadoop.io.LongWritable, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper.Context)}.
-	 */
-	@Test
-	public void testMapLongWritableTextContext() {
-		fail("Not yet implemented");
-	}
+	String wayInputLine = "<way id=\"21468157\" version=\"3\" "
+			+ "timestamp=\"2013-04-21T11:05:06Z\" uid=\"451693\" "
+			+ "user=\"bot-mode\" changeset=\"15808823\"> index=3 "
+			+ "<nd ref=\"230917750\"/> <tag k=\"name\" "
+			+ "v=\"South Hawkins Avenue\"/> "
+			+ "<tag k=\"highway\" v=\"residential\"/>";
+	String wayInputLineWayID = "21468157";
+	long wayInputLineNodeID = 230917750;
+	String wayInputLineWayName = "South~Hawkins~Avenue";
+	int wayInputLineNodeIndex = 3;
 
 	/**
 	 * Test method for {@link cs5621.project2.job1.Job1Mapper#extractLongitude(java.lang.String)}.
@@ -68,7 +72,9 @@ public class Job1MapperTest {
 	 */
 	@Test
 	public void testExtractNodeIDFromNodeLine() {
-		fail("Not yet implemented");
+		Job1Mapper map1 = new Job1Mapper();
+		long foundID = map1.extractNodeIDFromNodeLine(nodeInputLine);
+		assertTrue(foundID == nodeInputLineNodeID);
 	}
 
 	/**
@@ -76,7 +82,9 @@ public class Job1MapperTest {
 	 */
 	@Test
 	public void testExtractNodeIDFromWayLine() {
-		fail("Not yet implemented");
+		Job1Mapper map1 = new Job1Mapper();
+		long foundID = map1.extractNodeIDFromWayLine(wayInputLine);
+		assertTrue(foundID == wayInputLineNodeID);
 	}
 
 	/**
@@ -84,7 +92,9 @@ public class Job1MapperTest {
 	 */
 	@Test
 	public void testExtractWayID() {
-		fail("Not yet implemented");
+		Job1Mapper map1 = new Job1Mapper();
+		String foundID = map1.extractWayID(wayInputLine);
+		assertTrue(foundID.equals(wayInputLineWayID));
 	}
 
 	/**
@@ -92,7 +102,9 @@ public class Job1MapperTest {
 	 */
 	@Test
 	public void testExtractNodeIndex() {
-		fail("Not yet implemented");
+		Job1Mapper map1 = new Job1Mapper();
+		int foundIndex = map1.extractNodeIndex(wayInputLine);
+		assertTrue(foundIndex == wayInputLineNodeIndex);
 	}
 
 	/**
@@ -100,7 +112,9 @@ public class Job1MapperTest {
 	 */
 	@Test
 	public void testExtractRoadName() {
-		fail("Not yet implemented");
+		Job1Mapper map1 = new Job1Mapper();
+		String foundName = map1.extractRoadName(wayInputLine);
+		assertTrue(foundName.equals(wayInputLineWayName));
 	}
 
 }
