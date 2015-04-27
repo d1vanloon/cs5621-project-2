@@ -124,8 +124,8 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 			// Format the output value as
 			// "way <way id> <node index> [road~name]"
 			String outputValue = (roadName == null ? String.format(
-					"way %1$s $2$d", wayID, nodeIndex) : String.format(
-					"way %1$s $2$d %3$s", wayID, nodeIndex, roadName));
+					"way %1$s %2$d", wayID, nodeIndex) : String.format(
+					"way %1$s %2$d %3$s", wayID, nodeIndex, roadName));
 			
 			// Write the key and value to the reducer
 			context.write(new LongWritable(nodeID), new Text(outputValue));
