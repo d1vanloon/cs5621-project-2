@@ -79,6 +79,9 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 		 * Where names in <> are replaced with values, names in [] are 
 		 * optionally replaced with values, and values are separated 
 		 * by spaces. The road name will have spaces replaced with '~'.
+		 * If the actual road name is not available, the road description
+		 * will be used. If no road description is available, the value
+		 * will not be supplied to the reducer.
 		 */
 		
 		// Get the line of input data
