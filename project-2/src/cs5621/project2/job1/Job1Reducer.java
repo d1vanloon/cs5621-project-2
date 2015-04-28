@@ -13,9 +13,8 @@ public class Job1Reducer extends Reducer<LongWritable, Text, Text, Text> {
 		 //Strings to contain the value information that will be split based on blank spaces
 		 //information will either be way information or a pair of coordinates
 		String [] coordinates = null;
-		String[] wayInfo = null;
+		String [] wayInfo = null;
 		String isIntersection = "";
-		ArrayList<String> master = new ArrayList<String>();
 		//check to see if we have an intersection...
 		if(isIntersection(values)){
 			isIntersection = "1";
@@ -27,30 +26,32 @@ public class Job1Reducer extends Reducer<LongWritable, Text, Text, Text> {
 		
 		 for(Text value:values){
 			 //if the first character of the string is a 'w' we have a way
-			 if(value.charAt(0) == 'w'){
-				 wayInfo = value.toString().split(" ");
-			 }
-			 //else we have a node
-			 else{
+			 if(!value.toString().startsWith("way")){
 				 coordinates = value.toString().split(" ");
-			 }
-			 //if we have coordinates and a way entry concatenate them, store them in a string and add it to the array list.
-			 if(coordinates != null && wayInfo != null){
-				 String entry = wayInfo[0] + " " + wayInfo[1] + " " +wayInfo[2] + " " + wayInfo[3] + " " + coordinates[0]  + " " + coordinates[1];
-				 master.add(entry);
-			 }
-			 
+				 break;
+			 } 
 		 }
-		 for(String entries:master){
-	     if(entries != null){
-	    	String [] info = entries.toString().split(" ");
-		 	Text newKey = new Text(info[0] + info[3] + info[2]);
-		 	Text newValue = new Text(info[4] + " " + info[5] + " " + wayInfo[2] + " " + isIntersection);
 		 
-		 	//Write the key values
-		 	context.write(newKey, newValue);
-	     	}
-	     }
+		 
+		for(Text value:values){
+			if(value.charAt(0) == 'w'){
+				Text newKey;
+				wayInfo = value.toString().split(" ");
+						 
+				if(wayInfo.length > 3){
+			       newKey = new Text(wayInfo[1] + " " + wayInfo [3] + " " + wayInfo[2]);
+				}
+				else{
+					  newKey = new Text(wayInfo[1] + " " + wayInfo[2]);
+				}
+					 								//lat             lon 			        index				intersection
+				 Text newValue = new Text(coordinates[0] + " " + coordinates[1] + " " + wayInfo[2] + " " + isIntersection);
+		 
+				//Write the key values
+				  context.write(newKey, newValue);
+	     		}//end if
+		 	}//end for
+	     
 	 }//end reducer function
 
 	 
