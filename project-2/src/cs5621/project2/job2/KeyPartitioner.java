@@ -14,6 +14,6 @@ public class KeyPartitioner extends Partitioner<Text, Text>{
 		Text keyWayID = new Text(((Text) key).toString().substring(0, index));
 		
 		// Partition by wayID
-		return Integer.valueOf(keyWayID.toString());
+		return Integer.valueOf(keyWayID.toString()).hashCode()%numPartitions;
 	}
 }

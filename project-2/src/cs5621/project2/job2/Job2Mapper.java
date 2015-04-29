@@ -9,10 +9,16 @@ public class Job2Mapper extends Mapper<Text, Text, Text, Text> {
 	private final static Text newValue = new Text();
 	private Text newKey = new Text();
 	
+	/**
+	 * Mapper operation for the second job, where we calculate distances between intersections.
+	 * Key: < WayID, Way Name, Node Index >
+	 * Value: < lat, lon, node ID, node index, and intersection flag >
+	 */
 	@Override
 	public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
 		
-		String part[] = value.toString().split("\t");
+		
+		String part[] = value.toString().split("\t");		
 		newKey.set(part[0]);
 		newValue.set(part[1]);
 		
