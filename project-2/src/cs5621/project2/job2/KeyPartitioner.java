@@ -10,7 +10,7 @@ public class KeyPartitioner extends Partitioner<Text, Text>{
 		
 		int index = 0;
 		// Pull wayID from key
-		index = ((Text) key).toString().indexOf('\t');
+		index = ((Text) key).toString().indexOf(" ");
 		Text keyWayID = new Text(((Text) key).toString().substring(0, index));
 		
 		// Partition by wayID
