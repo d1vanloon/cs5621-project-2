@@ -57,7 +57,10 @@ public class Job2Reducer extends Reducer<Text, Text, Text, Text> {
 				point2[1] = Double.parseDouble(part[1]);
 				distance = c.latLongDistance(point1, point2);
 				newDistance += distance;
-				newKey.set(part[5]);
+				if(part.length==5)
+					newKey.set(part[5]);
+				else 
+					newKey.set("No Way Name");
 				newValue.set(interPoint + " " + point2 + " " + newDistance);
 				context.write(newKey, newValue);
 				point1 = point2;
