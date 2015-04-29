@@ -19,6 +19,7 @@ public class Job1Reducer extends Reducer<LongWritable, Text, Text, Text> {
 		String[] coordinates = null;
 		String[] wayInfo = null;
 		String isIntersection = "";
+		String nodeID = key.toString();
 		for (Text value : values) {
 
 			valuesCopy.add(new Text(value));
@@ -51,11 +52,11 @@ public class Job1Reducer extends Reducer<LongWritable, Text, Text, Text> {
 				
 
 				if (wayInfo.length > 3) {
-					newValue = new Text(coordinates[0] + " " + coordinates[1]
+					newValue = new Text(nodeID + " " + coordinates[0] + " " + coordinates[1]
 							+ " " + wayInfo[2] + " " + isIntersection + " "
 							+ wayInfo[3]);
 				} else {
-					newValue = new Text(coordinates[0] + " " + coordinates[1]
+					newValue = new Text(nodeID + " " + coordinates[0] + " " + coordinates[1]
 							+ " " + wayInfo[2] + " " + isIntersection);
 
 				}
