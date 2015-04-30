@@ -25,7 +25,7 @@ public class Calculator implements Serializable {
     * For North latitude and East longitude it is a plus,
     * for South latitude and West longitute it is a minus.
     * Params: point1[x-lat, y-long], point2[x-lat, y-long]
-    * Return: float in miles ex. 72.36 
+    * Return: float in miles ex. 72.36. 0.0 if the points are the same
     * Details:
     * φ = latitude
     * λ = longtitude
