@@ -7,20 +7,18 @@
 
 SRC_ADDRESS=www.davidvanloon.com/architecture/duluth_minnesota.osm.bz2
 
-echo "$#"
-echo "$1"
-
 if [[ ( $# -gt 0 ) && ( $1 == "-s" ) ]]; then
 	SRC_ADDRESS=www.davidvanloon.com/architecture/duluth_minnesota.osm.bz2
 	echo "Using small data file (Duluth, MN)."
 else
 	SRC_ADDRESS=http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/planet/planet-latest.osm.bz2
-	echo "Using full data file. Are you sure? This may take over a day. (y/N)"
-	read CHOICE
-	if [ "$CHOICE" != "Y" ]; then
-		echo "Okay, exiting."
-		exit 0
-	fi
+	read -p "Using full data file. Are you sure? This may take over a day. (y/N)" CHOICE
+	case $CHOICE in
+		[yY]* )	echo "Okay. Moving forward..."
+			break;;
+		[nN]* ) echo "Okay. Exiting..."
+			exit;;
+	esac
 fi
 
 echo "Downloading data..."
