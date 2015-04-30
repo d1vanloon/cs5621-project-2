@@ -13,7 +13,14 @@ public class Job3Reducer extends Reducer<Text, Text, Text, Text> {
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException{
 		org.apache.hadoop.conf.Configuration conf3 = context.getConfiguration();
-		int topN = Integer.parseInt(conf3.get("topN"));
+		
+		int topN = 1; // Default to one
+		try {
+			topN = new Integer(context.getConfiguration().get("topN"));
+		} catch(NumberFormatException e) {
+			// NA, nPages already zero
+		}
+		
 		int count =0;
 		for(Text value : values) {
 			if(count<topN)

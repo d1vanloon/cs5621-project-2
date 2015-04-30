@@ -29,20 +29,7 @@ public class Job2Test {
 		 */
 
 		// Job2
-		Job job2 = new Job(conf, "distance");
-		job2.setJarByClass(Job2Test.class);
-		job2.setPartitionerClass(KeyPartitioner.class);
-		job2.setGroupingComparatorClass(KeyGroupingComparator.class);
-		job2.setSortComparatorClass(CompositeKeyComparator.class);
-		job2.setMapperClass(Job2Mapper.class);
-		job2.setReducerClass(Job2Reducer.class);
-		job2.setOutputKeyClass(Text.class);
-		job2.setOutputKeyClass(Text.class);
 
-		FileInputFormat.addInputPath(job2, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job2, new Path(args[1]));
-
-		job2.waitForCompletion(true);
 
 
 	}

@@ -22,81 +22,67 @@ public class Job2Reducer extends Reducer<Text, Text, Text, Text> {
 	public void reduce(Text key, Iterable<Text> values, Context context)
 			throws IOException, InterruptedException, NumberFormatException {
 		
-		System.out.println("REDUCEREDUCE::" + key);
-		
 		Calculator c = new Calculator();
-		double firstPoint[] = new double[2];// Stores the first node point
-		double secondPoint[] = new double[2];// Stores the second node point
+		
+		double firstPoint[] = new double[2];// Stores the first point of way segement
+		double newPoint[] = new double[2];// Stores the new node point
+		double prevPoint[] = new double[2];// Stores the second node point
 		double distance = 0;// Stores the distance between two nodes
-
-		Text prevValue = null;
-		int counter = 0;
+		
 		Text streetName = new Text();
 		Text newValue = new Text();
+		Text prevValue = null;
+		
 		String firstPart[] = null;
+		String newPart[] = null;
 		String prevPart[] = null;
+		
+		int counter = 0;
 		int flag = 0;
 		
 		for (Text value : values) {
 
+			// Reset new key and value 
 			streetName = new Text();
 			newValue = new Text();
 			
-			
+			// If there is a previous value, we can compute distance and check intersection
 			if(counter > 0) {
 				
+				// Splits the values on space
 				prevPart = prevValue.toString().split(" ");
-				firstPart = value.toString().split(" ");// Splits the values on space
-				flag = Integer.parseInt(firstPart[4]);// variable to identify whether
-														  // the node is a
-														  // intersection
+				newPart = value.toString().split(" ");
 				
-				
-				
+				// Add new points to total segment distance
 				try {
-					String debug = new String();
-					debug += ("FirstPoint:" + firstPart[1] + " " + firstPart[2]);
-					debug += ("SecondPoint:" + prevPart[1] + " " + prevPart[2]);
-					if (firstPart.length == 6) {
-						streetName =  new Text(firstPart[5]);
-					} else {
-						streetName = new Text("No Way Name");
-					}
-					debug += streetName;
-					//System.out.println("Counter:" + counter + " " + debug + " " + flag);
-											
-					firstPoint[0] = Double.parseDouble(firstPart[1]);
-					firstPoint[1] = Double.parseDouble(firstPart[2]);
+					newPoint[0] = Double.parseDouble(newPart[1]);
+					newPoint[1] = Double.parseDouble(newPart[2]);
 						
-					secondPoint[0] = Double.parseDouble(prevPart[1]);
-					secondPoint[1] = Double.parseDouble(prevPart[2]);
-					distance += c.latLongDistance(firstPoint, secondPoint);
+					prevPoint[0] = Double.parseDouble(prevPart[1]);
+					prevPoint[1] = Double.parseDouble(prevPart[2]);
+					distance += c.latLongDistance(newPoint, prevPoint);
 					
-					//System.out.println("Distance Add:" + distance);
-					//prevValue = new Text(value.toString());
+					// variable to identify whether the node is an intersection
+					flag = Integer.parseInt(newPart[4]);
 						
 				} catch (NullPointerException e) {
 					System.out.println("NullPointer:" + e.getStackTrace());
 				}
-					
+				// It is an intersection so add new item and print
 				if (flag == 1) {
 
 					try {
-						firstPoint[0] = Double.parseDouble(firstPart[1]);
-						firstPoint[1] = Double.parseDouble(firstPart[2]);
-						secondPoint[0] = Double.parseDouble(prevPart[1]);
-						secondPoint[1] = Double.parseDouble(prevPart[2]);
-						distance += c.latLongDistance(firstPoint, secondPoint);
 						
-						if (firstPart.length == 6) {
-							streetName = new Text(firstPart[5]);
+						if (newPart.length == 6) {
+							streetName = new Text(newPart[5]);
 						} else {
 							streetName = new Text("No Way Name");
 						}
 						
-						newValue = new Text(streetName + " " + firstPoint[0] + " " + firstPoint[1] + " " + key);
-						context.write(new Text(String.valueOf(distance)), newValue);
+						newValue = new Text(firstPoint[0] + " " + firstPoint[1] + " " + newPoint[0] + " " + newPoint[1] + " " + distance);
+						context.write(streetName, newValue);
 
+						//Reset for new segment
 						distance = 0;
 						counter = 0;
 						flag = 0;
@@ -107,14 +93,30 @@ public class Job2Reducer extends Reducer<Text, Text, Text, Text> {
 				}
 				
 			}
+			
+			
+			// Parse and save the first element of segment
+			if (counter == 0) {
+				try {
+					firstPart = value.toString().split(" ");
+					firstPoint[0] = Double.parseDouble(firstPart[1]);
+					firstPoint[1] = Double.parseDouble(firstPart[2]);
+				} catch (NullPointerException e) {
+					System.out.println("NullPointer:" + e.getStackTrace());
+				}
+				
+			}
+			
+			// Assign current value to previous for next loop
 			prevValue = new Text(value.toString());
 			counter++;
 			
 		}
 		
-		// Abnormal base case of reducer values size == 1 or end of road without intersection
-		if (flag == 0 && distance > 0) {
-			prevPart = prevValue.toString().split(" ");
+		// Abnormal case of end of road without intersection
+		if (distance > 0) {
+			//newPart = prevValue.toString().split(" ");
+			
 			
 			if (prevPart.length == 6) {
 				streetName = new Text(prevPart[5]);
@@ -122,10 +124,8 @@ public class Job2Reducer extends Reducer<Text, Text, Text, Text> {
 				streetName = new Text("No Way Name");
 			}
 			
-			newValue = new Text(streetName + " " + prevPart[1] + " " + prevPart[2] + " " + key);
-			
-			
-			context.write(new Text(String.valueOf(distance)), newValue);
+			newValue = new Text(firstPoint[0] + " " + firstPoint[1] + " " + newPoint[0] + " " + newPoint[1] + " " + distance);
+			context.write(streetName, newValue);
 		}
 	}
 }
