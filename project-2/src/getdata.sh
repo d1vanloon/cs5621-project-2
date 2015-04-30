@@ -41,3 +41,9 @@ BASEDIR=$(dirname $0)
 
 /soft/java/jdk1.7.0_45/bin/java cs5621.project2.tools.OpenStreetMapInputFlattener $BASEDIR/input_data.osm $BASEDIR/input_data_flattened.osm
 
+echo "Finished processing input data."
+
+rm input_data.osm
+mv input_data_flatted.osm input_data_flattened.osm
+
+echo "Done."
