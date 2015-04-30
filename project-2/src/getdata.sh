@@ -15,7 +15,7 @@ else
 	read -p "Using full data file. Are you sure? This may take over a day. (y/N)" CHOICE
 	case $CHOICE in
 		[yY]* )	echo "Okay. Moving forward..."
-			break;;
+			;;
 		[nN]* ) echo "Okay. Exiting..."
 			exit;;
 	esac
