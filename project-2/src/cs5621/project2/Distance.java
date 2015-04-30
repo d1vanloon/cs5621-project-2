@@ -36,8 +36,8 @@ public class Distance {
 		 */
 
 		// Job2
-		Job job2 = Job.getInstance(conf, "distance");
-		job2.setJarByClass(Distance.class);
+		Job job2 = new Job(conf, "distance");
+		job2.setJarByClass(Job2Test.class);
 		job2.setPartitionerClass(KeyPartitioner.class);
 		job2.setGroupingComparatorClass(KeyGroupingComparator.class);
 		job2.setSortComparatorClass(CompositeKeyComparator.class);
@@ -52,7 +52,7 @@ public class Distance {
 		job2.waitForCompletion(true);
 
 		// Job3
-
+/*
 		Configuration conf3 = new Configuration();
 		conf3.set("topN", args[3]); // set top N Stretches
 		Job job3 = new Job(conf3, "topN");
@@ -69,7 +69,7 @@ public class Distance {
 		FileOutputFormat.setOutputPath(job3, new Path(args[1]));
 
 		job3.waitForCompletion(true);
-
+*/
 	}
 
 }

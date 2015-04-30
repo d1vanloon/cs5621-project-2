@@ -25,6 +25,6 @@ public class KeyGroupingComparator extends WritableComparator{
 		Text k2WayID = new Text(((Text) k2).toString().substring(0, index));
 	
 		// Returns 0 if equal
-		return k2WayID.compareTo(k1WayID);
+		return k1WayID.compareTo(k2WayID);
 	}
 }

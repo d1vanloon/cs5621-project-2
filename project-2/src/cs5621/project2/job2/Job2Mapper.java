@@ -23,11 +23,7 @@ public class Job2Mapper extends Mapper<LongWritable, Text, Text, Text> {
 		//String addKey[] = part[0].split(" ");
 		//System.out.println(addKey[1]);
 		newKey.set(part[0]);
-		newValue.set(part[1]);
-		System.out.println("new Key"+newKey);
-		System.out.println("newValue"+newValue);
-		
-		
+		newValue.set(part[1]);	
 		
 		context.write(newKey,newValue);
 	}

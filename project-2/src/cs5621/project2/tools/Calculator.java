@@ -1,12 +1,25 @@
 package cs5621.project2.tools;
 
+import java.io.Serializable;
 import java.lang.Math;
+
+import org.apache.hadoop.util.hash.Hash;
 
 /**
  * @author Brad Cutshall
  */
-public class Calculator {
+public class Calculator implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public Integer classHash = new Integer(0);
+	
+	public Calculator() {
+		classHash = hashCode();
+	}
+	
     /**
     * Distance between two latitude longitude ordered pairs, in miles.
     * For North latitude and East longitude it is a plus,
@@ -20,23 +33,24 @@ public class Calculator {
     */
     public double latLongDistance(double point1[], double point2[]) {
         double distance = 0;
-        double earthRadius=20902230.97; // Meters is 6371000
+        double earthRadius=20902230.97; // Currently feet, Meters is 6371000
         double mile=5280; 
+        
+        double aX = toRadians(point1[0]);
+        double aY = toRadians(point1[1]);
+        double bX = toRadians(point2[0]);
+        double bY = toRadians(point2[1]);
+        double bXaXhaversin = this.haversin(bX, aX);
+        double bYaYhaversin = this.haversin(bY, aY);
 
-        double aX = degToRadians(point1[0]);
-        double aY = degToRadians(point1[1]);
-        double bX = degToRadians(point2[0]);
-        double bY = degToRadians(point2[1]);
-
-        distance = 2*earthRadius*Math.asin
-        (
-            Math.sqrt(
-                haversin(bX, aX)
-                +( 
-                        Math.cos(aX) * Math.cos(bX) * haversin(bY, aY) 
+        distance = 2*earthRadius*Math.asin (
+                Math.sqrt(
+                    bXaXhaversin
+                    +( 
+                            Math.cos(aX) * Math.cos(bX) * bYaYhaversin 
+                    )
                 )
-            )
-        );
+            );
         return (distance/mile); 
     }
 
@@ -45,18 +59,17 @@ public class Calculator {
     * Params: two φ, or λ of different two points
     * Return float
     */
-    private double haversin(double b, double a) {
+    public double haversin(double b, double a) {
         double hav;
-
-        hav = Math.pow(Math.sin((b-a)/2),2); 
-
+        hav = Math.sin((b-a)/2);
+        hav = Math.pow(hav,2); 
         return hav;
     }
 
     /*
     * Simple enough, convert decimal degrees to radians.
     */
-    private double degToRadians (double point) {
+    public double toRadians (double point) {
         
         return point * (Math.PI / 180);
     }
