@@ -7,15 +7,19 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 public class Job3Mapper extends Mapper<LongWritable, Text, Text, Text> {
-	private Text newKey = new Text();
-	private Text newValue = new Text();
+
 	@Override
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+	
+		Text newKey = new Text();
+		Text newValue = new Text();
 		
-		String part[] = value.toString().split("\t");
-		String newPart[]=part[1].toString().split(" ");
-		newKey = new Text("DeFaultKey"+"\t"+newPart[4]);
-		newValue = new Text(part[0]+" "+part[1]);
+		String valPart[] = value.toString().split("\t");
+		String wayName = valPart[0].toString();
+		String parts[] = valPart[1].toString().split(" ");
+
+		newKey = new Text(parts[4]);
+		newValue = new Text(parts[0]+" "+parts[1] + " " + parts[2] + " " + parts[3] + " " + wayName);
 		
 		
 		context.write(newKey, newValue);

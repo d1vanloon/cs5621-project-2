@@ -8,11 +8,20 @@ public class NaturalKeyPartitioner extends Partitioner<Text, Text>{
 	@Override
 	public int getPartition(Text key, Text val, int numPartitions) {
 		
-		int index = 0;
+		int partition = 0;
+		int hash = 0;
+		
+		Double distance = Math.ceil(Double.valueOf(key.toString()));
+
+		partition = distance.intValue() % numPartitions;
 		// Pull DefaultKey from key
-		index = ((Text) key).toString().indexOf("\t");
+		//index = ((Text) key).toString().indexOf("\t");
 		// return number of partitions
-		return (key.toString().substring(0, index).hashCode())%numPartitions;
+		
+		
+		
+		 return partition;
+		//return (key.toString().substring(0, index).hashCode())%numPartitions;
 		
 	}
 }

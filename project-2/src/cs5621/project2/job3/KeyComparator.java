@@ -16,10 +16,12 @@ public class KeyComparator extends WritableComparator {
 	public int compare(WritableComparable k1, WritableComparable k2) {
 		int index = 0;
 
+		System.out.println("KEYCOMPAERATOR: KEY1:" + ((Text)k1).toString() + " KEY2:" + ((Text)k1).toString());
+		
 		// Pull distance from k1
 		index = ((Text) k1).toString().indexOf("\t");
 		Text k1Way = new Text(((Text) k1).toString().substring(index + 1));
-		System.out.println("k1Way" + k1Way);
+		//System.out.println("k1Way" + k1Way);
 		// Long k1Distance = new Long(Long.parseLong(k1Way.toString()));
 		// Pull distance from k2
 		index = ((Text) k2).toString().indexOf("\t");
@@ -30,7 +32,7 @@ public class KeyComparator extends WritableComparator {
 		// compareTo:: return (thisValue<thatValue ? -1 : (thisValue==thatValue
 		// ? 0 : 1));
 		// Returns 1 if k2 < k1 = -1, else 1
-		return k2Way.compareTo(k1Way);
+		return Double.valueOf(k2Way.toString()).compareTo(Double.valueOf(k1Way.toString()));
 
 	}
 

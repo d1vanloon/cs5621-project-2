@@ -40,7 +40,7 @@ public class Distance {
 		 * 
 		 * job1.waitForCompletion(true);
 		 */
-
+/*
 		// Job2
 		Job job2 = new Job(conf, "distance");
 		job2.setJarByClass(Job2Test.class);
@@ -58,12 +58,11 @@ public class Distance {
 		FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]));
 
 		job2.waitForCompletion(true);
-
+*/
 		// Job3
-/*
-		Configuration conf3 = new Configuration();
-		conf3.set("topN", args[3]); // set top N Stretches
-		Job job3 = new Job(conf3, "topN");
+
+		//conf.set("topN", args[2]); // set top N Stretches
+		Job job3 = new Job(conf, "topN");
 		job3.setJarByClass(Distance.class);
 		job3.setPartitionerClass(NaturalKeyPartitioner.class);
 		job3.setGroupingComparatorClass(KeyGroupComparator.class);
@@ -72,12 +71,16 @@ public class Distance {
 		job3.setReducerClass(Job3Reducer.class);
 		job3.setOutputKeyClass(Text.class);
 		job3.setOutputKeyClass(Text.class);
+		job3.setNumReduceTasks(Integer.parseInt(otherArgs[2]));
 
-		FileInputFormat.addInputPath(job3, new Path(otherArgs[1]+"/SecondJobOutput"));
-		FileOutputFormat.setOutputPath(job3, new Path(otherArgs[1]));
+		//FileInputFormat.addInputPath(job3, new Path(otherArgs[1]+"/SecondJobOutput"));
+		//FileOutputFormat.setOutputPath(job3, new Path(otherArgs[1]));
+		FileInputFormat.addInputPath(job3, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job3, new Path(args[1]));
 
 		job3.waitForCompletion(true);
-*/
+
+
 	}
 
 }

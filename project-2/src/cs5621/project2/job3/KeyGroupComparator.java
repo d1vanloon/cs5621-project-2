@@ -15,6 +15,8 @@ public class KeyGroupComparator extends WritableComparator {
 	@Override
 	public int compare(WritableComparable k1, WritableComparable k2) {
 
+		System.out.println("GROUPCOMPAERATOR: KEY1:" + ((Text)k1).toString() + " KEY2:" + ((Text)k1).toString());
+		/*
 		int index = 0;
 		// Pull the Default Key
 		index = ((Text) k1).toString().indexOf("\t");
@@ -23,8 +25,13 @@ public class KeyGroupComparator extends WritableComparator {
 		// Pull the Default key
 		index = ((Text) k2).toString().indexOf("\t");
 		Text k2Default = new Text(((Text) k2).toString().substring(0, index));
+		*/
+		
+		Double key1 = Double.parseDouble(((Text)k1).toString());
+		Double key2 = Double.parseDouble(((Text)k2).toString());
+		
 
 		// Compare the keys and Return the Result
-		return k2Default.compareTo(k1Default);
+		return key1.compareTo(key2);
 	}
 }
