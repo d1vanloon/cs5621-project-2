@@ -16,3 +16,4 @@ public class NaturalKeyPartitioner extends Partitioner<Text, Text>{
 		
 	}
 }
+
