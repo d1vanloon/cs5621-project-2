@@ -12,7 +12,5 @@ cs5621/project2/job2/KeyPartitioner.java
 cs5621/project2/job1/Job1Reducer.java
 cs5621/project2/job1/Job1Test.java
 cs5621/project2/job1/Job1Mapper.java
-cs5621/project2/job1/test/Job1MapperTest.java
-cs5621/project2/tools/OpenStreetMapInputFlattener.java
 cs5621/project2/Distance.java
 cs5621/project2/job3/KeyGroupComparator.java
