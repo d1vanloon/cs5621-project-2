@@ -27,20 +27,20 @@ public class Distance {
 		conf.setInt("topN",Integer.parseInt(otherArgs[2]));
 		
 		// Job1
-		/*
-		 * Job job1 = Job.getInstance(conf, "sort");
-		 * job1.setJarByClass(Distance.class);
-		 * job1.setMapperClass(Job1Mapper.class);
-		 * job1.setReducerClass(Job1Reducer.class);
-		 * job1.setOutputKeyClass(Text.class);
-		 * job1.setOutputKeyClass(Text.class);
-		 * 
-		 * FileInputFormat.addInputPath(job1, new Path(otherArgs[0]));
-		   FileOutputFormat.setOutputPath(job1, new Path(otherArgs[1]+"/FirstJobOutput"));
-		 * 
-		 * job1.waitForCompletion(true);
-		 */
-/*
+		
+		  Job job1 = Job.getInstance(conf, "sort");
+		  job1.setJarByClass(Distance.class);
+		  job1.setMapperClass(Job1Mapper.class);
+		  job1.setReducerClass(Job1Reducer.class);
+		  job1.setOutputKeyClass(Text.class);
+		  job1.setOutputKeyClass(Text.class);
+		  
+		  FileInputFormat.addInputPath(job1, new Path(otherArgs[0]));
+		  FileOutputFormat.setOutputPath(job1, new Path(otherArgs[1]+"/FirstJobOutput"));
+		  
+		  job1.waitForCompletion(true);
+	 
+
 		// Job2
 		Job job2 = new Job(conf, "distance");
 		job2.setJarByClass(Job2Test.class);
@@ -52,16 +52,14 @@ public class Distance {
 		job2.setOutputKeyClass(Text.class);
 		job2.setOutputKeyClass(Text.class);
 
-		//FileInputFormat.addInputPath(job2, new Path(otherArgs[1]+"/FirstJobOutput"));
-		//FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]+"/SecondJobOutput"));
-		FileInputFormat.addInputPath(job2, new Path(otherArgs[0]));
-		FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]));
+		FileInputFormat.addInputPath(job2, new Path(otherArgs[1]+"/FirstJobOutput"));
+		FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]+"/SecondJobOutput"));
+		//FileInputFormat.addInputPath(job2, new Path(otherArgs[0]));
+		//FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]));
 
 		job2.waitForCompletion(true);
-*/
-		// Job3
 
-		//conf.set("topN", args[2]); // set top N Stretches
+		// Job3
 		Job job3 = new Job(conf, "topN");
 		job3.setJarByClass(Distance.class);
 		job3.setPartitionerClass(NaturalKeyPartitioner.class);
@@ -73,10 +71,10 @@ public class Distance {
 		job3.setOutputKeyClass(Text.class);
 		job3.setNumReduceTasks(Integer.parseInt(otherArgs[2]));
 
-		//FileInputFormat.addInputPath(job3, new Path(otherArgs[1]+"/SecondJobOutput"));
+		FileInputFormat.addInputPath(job3, new Path(otherArgs[1]+"/SecondJobOutput"));
+		FileOutputFormat.setOutputPath(job3, new Path(otherArgs[1]));
+		//FileInputFormat.addInputPath(job3, new Path(otherArgs[0]));
 		//FileOutputFormat.setOutputPath(job3, new Path(otherArgs[1]));
-		FileInputFormat.addInputPath(job3, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job3, new Path(args[1]));
 
 		job3.waitForCompletion(true);
 
