@@ -28,7 +28,7 @@ public class Distance {
 		
 		// Job1
 		
-		  Job job1 = Job.getInstance(conf, "sort");
+		  Job job1 = new Job(conf, "sort");
 		  job1.setJarByClass(Distance.class);
 		  job1.setMapperClass(Job1Mapper.class);
 		  job1.setReducerClass(Job1Reducer.class);
