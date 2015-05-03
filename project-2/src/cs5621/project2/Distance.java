@@ -39,7 +39,7 @@ public class Distance {
 		  job1.setOutputValueClass(Text.class);
 		  
 		  FileInputFormat.addInputPath(job1, new Path(otherArgs[0]));
-		  FileOutputFormat.setOutputPath(job1, new Path(otherArgs[1]+"/FirstJobOutput"));
+		  FileOutputFormat.setOutputPath(job1, new Path("job1output"));
 		  
 		  job1.waitForCompletion(true);
 	 
@@ -55,8 +55,8 @@ public class Distance {
 		job2.setOutputKeyClass(Text.class);
 		job2.setOutputValueClass(Text.class);
 
-		FileInputFormat.addInputPath(job2, new Path(otherArgs[1]+"/FirstJobOutput"));
-		FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]+"/SecondJobOutput"));
+		FileInputFormat.addInputPath(job2, new Path("job1output"));
+		FileOutputFormat.setOutputPath(job2, new Path("job2output"));
 		//FileInputFormat.addInputPath(job2, new Path(otherArgs[0]));
 		//FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]));
 
@@ -74,7 +74,7 @@ public class Distance {
 		job3.setOutputValueClass(Text.class);
 		job3.setNumReduceTasks(Integer.parseInt(otherArgs[2]));
 
-		FileInputFormat.addInputPath(job3, new Path(otherArgs[1]+"/SecondJobOutput"));
+		FileInputFormat.addInputPath(job3, new Path("job2output"));
 		FileOutputFormat.setOutputPath(job3, new Path(otherArgs[1]));
 		//FileInputFormat.addInputPath(job3, new Path(otherArgs[0]));
 		//FileOutputFormat.setOutputPath(job3, new Path(otherArgs[1]));
