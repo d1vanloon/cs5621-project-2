@@ -33,7 +33,7 @@ public class Distance {
 		  job1.setMapperClass(Job1Mapper.class);
 		  job1.setReducerClass(Job1Reducer.class);
 		  job1.setOutputKeyClass(Text.class);
-		  job1.setOutputKeyClass(Text.class);
+		  job1.setOutputValueClass(Text.class);
 		  
 		  FileInputFormat.addInputPath(job1, new Path(otherArgs[0]));
 		  FileOutputFormat.setOutputPath(job1, new Path(otherArgs[1]+"/FirstJobOutput"));
@@ -43,14 +43,14 @@ public class Distance {
 
 		// Job2
 		Job job2 = new Job(conf, "distance");
-		job2.setJarByClass(Job2Test.class);
+		job2.setJarByClass(Distance.class);
 		job2.setPartitionerClass(KeyPartitioner.class);
 		job2.setGroupingComparatorClass(KeyGroupingComparator.class);
 		job2.setSortComparatorClass(CompositeKeyComparator.class);
 		job2.setMapperClass(Job2Mapper.class);
 		job2.setReducerClass(Job2Reducer.class);
 		job2.setOutputKeyClass(Text.class);
-		job2.setOutputKeyClass(Text.class);
+		job2.setOutputValueClass(Text.class);
 
 		FileInputFormat.addInputPath(job2, new Path(otherArgs[1]+"/FirstJobOutput"));
 		FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]+"/SecondJobOutput"));
@@ -68,7 +68,7 @@ public class Distance {
 		job3.setMapperClass(Job3Mapper.class);
 		job3.setReducerClass(Job3Reducer.class);
 		job3.setOutputKeyClass(Text.class);
-		job3.setOutputKeyClass(Text.class);
+		job3.setOutputValueClass(Text.class);
 		job3.setNumReduceTasks(Integer.parseInt(otherArgs[2]));
 
 		FileInputFormat.addInputPath(job3, new Path(otherArgs[1]+"/SecondJobOutput"));
