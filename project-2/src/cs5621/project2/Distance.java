@@ -6,6 +6,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 
 import cs5621.project2.job1.*;
@@ -32,6 +33,8 @@ public class Distance {
 		  job1.setJarByClass(Distance.class);
 		  job1.setMapperClass(Job1Mapper.class);
 		  job1.setReducerClass(Job1Reducer.class);
+		job1.setMapOutputKeyClass(LongWritable.class);
+		job1.setMapOutputValueClass(Text.class);
 		  job1.setOutputKeyClass(Text.class);
 		  job1.setOutputValueClass(Text.class);
 		  
