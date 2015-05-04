@@ -6,7 +6,7 @@ import org.apache.hadoop.io.Text;
 public class KeyPartitioner extends Partitioner<Text, Text>{
 
 	@Override
-	public int getPartition(Text key, Text val, int numPartitions) {
+	public int getPartition(Text key, Text val, int numPartitions)  throws IndexOutOfBoundsException{
 		
 		int index = 0;
 		// Pull wayID from key

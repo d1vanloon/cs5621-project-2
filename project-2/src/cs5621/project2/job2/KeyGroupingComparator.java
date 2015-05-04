@@ -13,7 +13,7 @@ public class KeyGroupingComparator extends WritableComparator{
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public int compare(WritableComparable k1, WritableComparable k2) {
+	public int compare(WritableComparable k1, WritableComparable k2) throws IndexOutOfBoundsException {
 		
 		int index = 0;
 		// Pull wayID and nodeID from k1

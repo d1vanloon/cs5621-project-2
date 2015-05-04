@@ -7,8 +7,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 public class Job2Mapper extends Mapper<LongWritable, Text, Text, Text> {
-	private final static Text newValue = new Text();
-	private Text newKey = new Text();
+	
 	
 	/**
 	 * Mapper operation for the second job, where we calculate distances between intersections.
@@ -20,12 +19,9 @@ public class Job2Mapper extends Mapper<LongWritable, Text, Text, Text> {
 		
 		
 		String part[] = value.toString().split("\t");
-		//String addKey[] = part[0].split(" ");
-		//System.out.println(addKey[1]);
-		newKey.set(part[0]);
-		newValue.set(part[1]);	
+			
 		
-		context.write(newKey,newValue);
+		context.write(new Text(part[0]),new Text(part[1]));
 	}
 	
 }

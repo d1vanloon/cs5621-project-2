@@ -14,7 +14,7 @@ public class CompositeKeyComparator extends WritableComparator {
 	 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public int compare(WritableComparable k1, WritableComparable k2) {
+	public int compare(WritableComparable k1, WritableComparable k2) throws IndexOutOfBoundsException {
 		int index = 0;
 		Text k1NodeIndex = new Text();
 		Text k2NodeIndex = new Text();
@@ -53,6 +53,8 @@ public class CompositeKeyComparator extends WritableComparator {
 		Text k1WayID = new Text(((Text) k1).toString().substring(0, index));
 		Text k2WayID = new Text(((Text) k2).toString().substring(0, index));
 		int compare = k1WayID.compareTo(k2WayID);
+		
+		
 		
 		// compareTo:: return (thisValue<thatValue ? -1 : (thisValue==thatValue ? 0 : 1));
 		// Returns 1 if k2 < k1 = -1, else 1
