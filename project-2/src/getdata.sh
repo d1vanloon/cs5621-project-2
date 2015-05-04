@@ -12,7 +12,7 @@ if [[ ( $# -gt 0 ) && ( $1 == "-s" ) ]]; then
 	echo "Using small data file (Duluth, MN)."
 else
 	SRC_ADDRESS=http://ftp5.gwdg.de/pub/misc/openstreetmap/planet.openstreetmap.org/planet/planet-latest.osm.bz2
-	read -p "Using full data file. Are you sure? This may take over a day. (y/N)" CHOICE
+	read -p "Using full data file. Are you sure? This may take over a day. (Y/n)" CHOICE
 	case $CHOICE in
 		[yY]* )	echo "Okay. Moving forward..."
 			;;
@@ -31,7 +31,7 @@ echo "Downloading utilities..."
 
 mkdir -p cs5621/project2/tools
 wget -q www.davidvanloon.com/architecture/OpenStreetMapInputFlattener.java
-/soft/java/jdk1.7.0_45/bin/javac OpenStreetMapInputFlattener.java
+/panfs/roc/scratch/teamC/jdk1.7.0_45/bin/javac OpenStreetMapInputFlattener.java
 mv OpenStreetMapInputFlattener.class cs5621/project2/tools
 
 echo "Extracting data..."
@@ -42,7 +42,7 @@ echo "Processing input data..."
 
 BASEDIR=$(dirname $0)
 
-/soft/java/jdk1.7.0_45/bin/java cs5621.project2.tools.OpenStreetMapInputFlattener $BASEDIR/input_data.osm $BASEDIR/input_data_flattened.osm
+/panfs/roc/scratch/teamC/jdk1.7.0_45/bin/java cs5621.project2.tools.OpenStreetMapInputFlattener $BASEDIR/input_data.osm $BASEDIR/input_data_flattened.osm
 
 echo "Finished processing input data."
 
