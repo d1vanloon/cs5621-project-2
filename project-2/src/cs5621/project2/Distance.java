@@ -44,19 +44,19 @@ public class Distance extends Configured implements Tool {
 
 		// Job1
 
-		Job job1 = new Job(conf, "distance");
-		job1.setJarByClass(Distance.class);
-		job1.setMapperClass(Job1Mapper.class);
-		job1.setReducerClass(Job1Reducer.class);
-		job1.setOutputKeyClass(Text.class);
-		job1.setOutputKeyClass(Text.class);
-		job1.setMapOutputKeyClass(LongWritable.class);
-		job1.setMapOutputValueClass(Text.class);
-
-		FileInputFormat.addInputPath(job1, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job1, new Path(OUTPUT_PATH));
-
-		job1.waitForCompletion(true);
+//		Job job1 = new Job(conf, "distance");
+//		job1.setJarByClass(Distance.class);
+//		job1.setMapperClass(Job1Mapper.class);
+//		job1.setReducerClass(Job1Reducer.class);
+//		job1.setOutputKeyClass(Text.class);
+//		job1.setOutputKeyClass(Text.class);
+//		job1.setMapOutputKeyClass(LongWritable.class);
+//		job1.setMapOutputValueClass(Text.class);
+//
+//		FileInputFormat.addInputPath(job1, new Path(args[0]));
+//		FileOutputFormat.setOutputPath(job1, new Path(OUTPUT_PATH));
+//
+//		job1.waitForCompletion(true);
 
 		// Job2
 		Job job2 = new Job(conf, "distance");
@@ -69,30 +69,30 @@ public class Distance extends Configured implements Tool {
 		job2.setOutputKeyClass(Text.class);
 		job2.setOutputKeyClass(Text.class);
 
-		FileInputFormat.addInputPath(job2, new Path(OUTPUT_PATH));
-		FileOutputFormat.setOutputPath(job2, new Path(OUTPUT_PATH1));
+		FileInputFormat.addInputPath(job2, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job2, new Path(args[1]));
 		
 
-		job2.waitForCompletion(true);
+		return job2.waitForCompletion(true) ? 0 : 1;
 
 		// Job3
 
 		// conf.set("topN", args[2]); // set top N Stretches
-		Job job3 = new Job(conf, "topN");
-		job3.setJarByClass(Distance.class);
-		job3.setMapperClass(Job3Mapper.class);
-		job3.setReducerClass(Job3Reducer.class);
-		job3.setMapOutputKeyClass(NullWritable.class);
-		job3.setMapOutputValueClass(Text.class);
-		job3.setOutputKeyClass(NullWritable.class);
-		job3.setOutputKeyClass(Text.class);
-		job3.setNumReduceTasks(1);
-
-		FileInputFormat.addInputPath(job3, new Path(OUTPUT_PATH1));
-		FileOutputFormat.setOutputPath(job3, new Path(args[1]));
-
-
-		return job3.waitForCompletion(true) ? 0 : 1;
+//		Job job3 = new Job(conf, "topN");
+//		job3.setJarByClass(Distance.class);
+//		job3.setMapperClass(Job3Mapper.class);
+//		job3.setReducerClass(Job3Reducer.class);
+//		job3.setMapOutputKeyClass(NullWritable.class);
+//		job3.setMapOutputValueClass(Text.class);
+//		job3.setOutputKeyClass(NullWritable.class);
+//		job3.setOutputKeyClass(Text.class);
+//		job3.setNumReduceTasks(1);
+//
+//		FileInputFormat.addInputPath(job3, new Path(OUTPUT_PATH1));
+//		FileOutputFormat.setOutputPath(job3, new Path(args[1]));
+//
+//
+//		return job3.waitForCompletion(true) ? 0 : 1;
 
 	}
 
