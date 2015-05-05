@@ -52,7 +52,7 @@ public class Distance extends Configured implements Tool {
 		job1.setOutputKeyClass(Text.class);
 		job1.setMapOutputKeyClass(LongWritable.class);
 		job1.setMapOutputValueClass(Text.class);
-
+		job1.setNumReduceTasks(128);
 		FileInputFormat.addInputPath(job1, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job1, new Path(OUTPUT_PATH));
 
@@ -68,7 +68,7 @@ public class Distance extends Configured implements Tool {
 		job2.setReducerClass(Job2Reducer.class);
 		job2.setOutputKeyClass(Text.class);
 		job2.setOutputKeyClass(Text.class);
-
+		job2.setNumReduceTasks(128);
 		FileInputFormat.addInputPath(job2, new Path(OUTPUT_PATH));
 		FileOutputFormat.setOutputPath(job2, new Path(OUTPUT_PATH1));
 		
