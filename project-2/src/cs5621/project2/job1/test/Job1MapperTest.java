@@ -30,11 +30,12 @@ public class Job1MapperTest {
 			+ "user=\"bot-mode\" changeset=\"15808823\"> index=3 "
 			+ "<nd ref=\"230917750\"/> <tag k=\"name\" "
 			+ "v=\"South Hawkins Avenue\"/> "
-			+ "<tag k=\"highway\" v=\"residential\"/>";
+			+ "<tag k=\"highway\" v=\"proposed\"/>";
 	String wayInputLineWayID = "21468157";
 	long wayInputLineNodeID = 230917750;
 	String wayInputLineWayName = "South~Hawkins~Avenue";
 	int wayInputLineNodeIndex = 3;
+	String wayInputLineDescriptor = "proposed";
 
 	/**
 	 * Test method for {@link cs5621.project2.job1.Job1Mapper#extractLongitude(java.lang.String)}.
@@ -115,6 +116,16 @@ public class Job1MapperTest {
 		Job1Mapper map1 = new Job1Mapper();
 		String foundName = map1.extractRoadName(wayInputLine);
 		assertTrue(foundName.equals(wayInputLineWayName));
+	}
+	
+	/**
+	 * Test method for {@link cs5621.project2.job1.Job1Mapper#extractHighwayDescriptor(java.lang.String)}.
+	 */
+	@Test
+	public void testExtractHighwayDescriptor() {
+		Job1Mapper map1 = new Job1Mapper();
+		String foundDescriptor = map1.extractHighwayDescriptor(wayInputLine);
+		assertTrue(foundDescriptor.equals(wayInputLineDescriptor));
 	}
 
 }
