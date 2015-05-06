@@ -22,8 +22,26 @@ import cs5621.project2.job2.KeyPartitioner;
 import cs5621.project2.job3.Job3Mapper;
 import cs5621.project2.job3.Job3Reducer;
 
+/**
+ * The Distance class configures each job with all required parameters. This
+ * includes the command-line arguments, which are parsed and passed to the jobs.
+ * Each job is run in order, taking into account the interdependencies between
+ * them.
+ * 
+ * @author Brad Cutshall
+ * @author Vamsidhar Kasireddy
+ *
+ */
 public class Distance extends Configured implements Tool {
 
+	/**
+	 * Main method. Runs an instance of the project.
+	 * 
+	 * @param args
+	 *            command-line arguments
+	 * @throws Exception
+	 *             if an error is encountered
+	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length != 3) {
 			System.err
@@ -33,13 +51,15 @@ public class Distance extends Configured implements Tool {
 		ToolRunner.run(new Configuration(), new Distance(), args);
 	}
 
+	/**
+	 * Runs an instance of the project.
+	 */
 	public int run(String[] args) throws Exception {
 		final String OUTPUT_PATH = "intermediate_output";
 		final String OUTPUT_PATH1 = "intermediate_output1";
 		Configuration conf = new Configuration();
 
-		// Set the command line argument value for M top languages to
-		// "WikiSpikes_M"
+		// Configure the parameter
 		conf.setInt("topN", Integer.parseInt(args[2]));
 
 		// Job1
@@ -59,6 +79,7 @@ public class Distance extends Configured implements Tool {
 		job1.waitForCompletion(true);
 
 		// Job2
+		
 		Job job2 = new Job(conf, "distance");
 		job2.setJarByClass(Distance.class);
 		job2.setPartitionerClass(KeyPartitioner.class);
@@ -77,7 +98,6 @@ public class Distance extends Configured implements Tool {
 
 		// Job3
 
-		// conf.set("topN", args[2]); // set top N Stretches
 		Job job3 = new Job(conf, "topN");
 		job3.setJarByClass(Distance.class);
 		job3.setMapperClass(Job3Mapper.class);
