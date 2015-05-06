@@ -70,6 +70,8 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 		 *  - The <way id> is the value between "way id=\"" and the next "\""
 		 *  - The <node index> is the integer value directly following "index="
 		 *  - The <road name> is the value between "v=\"" and the next "\""
+		 *  
+		 * Nodes with a highway descriptor of "proposed" will be ignored.
 		 * 
 		 * Output: 
 		 * 
@@ -124,14 +126,22 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 			// Extract the road name
 			String roadName = extractRoadName(line);
 			
-			// Format the output value as
-			// "way <way id> <node index> [road~name]"
-			String outputValue = (roadName == null ? String.format(
-					"way %1$s %2$d", wayID, nodeIndex) : String.format(
-					"way %1$s %2$d %3$s", wayID, nodeIndex, roadName));
+			// Extract the road descriptor
+			String roadDescriptor = extractHighwayDescriptor(line);
 			
-			// Write the key and value to the reducer
-			context.write(new LongWritable(nodeID), new Text(outputValue));
+			// Only write to context if the road descriptor is not proposed
+			if (!roadDescriptor.equals("proposed")) {
+
+				// Format the output value as
+				// "way <way id> <node index> [road~name]"
+				String outputValue = (roadName == null ? String.format(
+						"way %1$s %2$d", wayID, nodeIndex) : String.format(
+						"way %1$s %2$d %3$s", wayID, nodeIndex, roadName));
+
+				// Write the key and value to the reducer
+				context.write(new LongWritable(nodeID), new Text(outputValue));
+
+			}
 
 			// Increment the number of way entry lines processed
 			context.getCounter(InputLineTypes.WAY_ENTRY).increment(1);
@@ -277,4 +287,25 @@ public class Job1Mapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 		}
 	}
 	
+	/**
+	 * Extracts the highway descriptor from an input line.
+	 * 
+	 * @param line
+	 *            the input line
+	 * @return the highway descriptor, or null if it does not exist in the input
+	 *         line
+	 */
+	public String extractHighwayDescriptor(String line) {
+		String attributeName = "k=\"highway\" v";
+		try {
+			// Get the highway descriptor
+			String descriptor = extractUniqueAttribute(line, attributeName);
+			// Return the highway descriptor
+			return descriptor;
+		} catch (InputMismatchException ex) {
+			// The highway descriptor was not included in the input line
+			return null;
+		}
+	}
+
 }
