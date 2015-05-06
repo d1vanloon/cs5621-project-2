@@ -1,12 +1,19 @@
 package cs5621.project2.job3;
 
 /* author: Vamsidhar Kasireddy 
- * Functionality : Reads in the output sent from the mapper with null value as the key and Road name,coordinates of two ends of stretch, distance of the stretch as value sorted in ascending order 
- * stores them into a tree map with size not more than TOPN, key as road distance and values as road name, coordinates,road distance as key value pairs of the Tree Map
- * then prints them in Descending order.
+ * Reads in the output sent from the mapper with null value as the key and Road name,coordinates of two ends of stretch, distance 
+ * of the stretch as value sorted in ascending order then finds the topN from the finalists sent by the mappers
  * 
- * Sample Input : null(key)	 Fox~Farm~Road	47.0333872 -91.9806254 47.046037 -91.912504 3.6073043746174913(Value)
- * Sample output :  Fox~Farm~Road	47.0333872 -91.9806254 47.046037 -91.912504 3.6073043746174913
+ * 
+ * Input : 
+ * Key : Null
+ * Value : <Start Lat, Start Lon, End Lat, End Lon, Segment Distance>	 
+ * 
+ * 
+ * 
+ * Output:
+ *  Key : Null
+ * Value : <Start Lat, Start Lon, End Lat, End Lon, Segment Distance>	 
  *
  *
  */
@@ -80,5 +87,5 @@ public class Job3Reducer extends
 		}
 
 	}
-
+// Reducer complete
 }
