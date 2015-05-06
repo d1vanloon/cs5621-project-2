@@ -32,7 +32,6 @@ public class CompositeKeyComparator extends WritableComparator {
 		
 		// Setup the comparator
 		int index = 0;
-		int compare = -1;
 		Text k1NodeIndex = new Text();
 		Text k2NodeIndex = new Text();
 		IntWritable k1NodeIndexNum = new IntWritable();
@@ -73,17 +72,14 @@ public class CompositeKeyComparator extends WritableComparator {
 			System.out.println("fourth CompositeKeyComparator Error:"
 					+ e.getMessage());
 		}
-		try {
+		
 
 			Text k1WayID = new Text(((Text) k1).toString().substring(0, index));
 
 			Text k2WayID = new Text(((Text) k2).toString().substring(0, index));
-			compare = k1WayID.compareTo(k2WayID);
+			int compare = k1WayID.compareTo(k2WayID);
 
-		} catch (IndexOutOfBoundsException e) {
-			System.out.println("Exception" + ((Text) k1).toString() + " "
-					+ ((Text) k2).toString());
-		}
+		
 
 		// Return a inequality answer.
 		// compareTo:: return (thisValue<thatValue ? -1 : (thisValue==thatValue
