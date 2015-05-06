@@ -12,19 +12,39 @@ import org.apache.hadoop.mapreduce.Reducer;
 import cs5621.project2.tools.Calculator;
 
 /*
- * Calculates the distance between each intersection and sends its to the next MapReduce Job
- * Selects two Immediate neighbors in a way and finds the distance between those nodes
+ * Calculates the distance of a way segment between each intersection.
+ * This reducer's will output the way segment's way name, two points
+ * referring to the beginning and end intersections, and the computed
+ * way segment distance. We are only concerned about the way name, the 
+ * way's Latitude and Longitude value pairs of the way segment's start 
+ * and end coordinates, and the distance we can ignore the incoming so
+ * we can ignore the Key.  The values must come into the reducer sorted
+ * by the order they exist in the way segment.
+ * 
+ * Input: 
+ * 	Key: <Text Way ID> 
+ * 		The key of this job is the segment's way ID acts only to reduce
+ * 		all of a way segment's nodes to a single reducer.
+ * 	Values: <[Node ID], Latitude, Longitude, [Order in Way Segment], Intersection Flag {0,1}, Way Name>
+ * 		Latitude, Longitude coordinate points of 
+ * 
+ * Output:
+ * 	Key: <Way Name>
+ * 	Value: <Start Lat, Start Lon, End Lat, End Lon, Segment Distance>
  * 
  */
 public class Job2Reducer extends Reducer<Text, Text, Text, Text> {
 
+	/**
+	 * Reducer for Job2, calculates the distance of each way segment between intersections.
+	 */
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context)
 			throws IOException, InterruptedException, NumberFormatException {
 		
 		Calculator c = new Calculator();
 		
-		double firstPoint[] = new double[2];// Stores the first point of way segement
+		double firstPoint[] = new double[2];// Stores the first point of way segment
 		double newPoint[] = new double[2];// Stores the new node point
 		double prevPoint[] = new double[2];// Stores the second node point
 		double distance = 0;// Stores the distance between two nodes
@@ -111,7 +131,7 @@ public class Job2Reducer extends Reducer<Text, Text, Text, Text> {
 			prevValue = new Text(value.toString());
 			counter++;
 			
-		}
+		} // End value loop (for)
 		
 		// Abnormal case of end of road without intersection
 		if (distance > 0) {
@@ -128,4 +148,5 @@ public class Job2Reducer extends Reducer<Text, Text, Text, Text> {
 			context.write(streetName, newValue);
 		}
 	}
+	// Reducer Complete
 }

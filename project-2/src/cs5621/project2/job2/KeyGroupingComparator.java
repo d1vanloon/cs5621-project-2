@@ -4,6 +4,15 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 import org.apache.hadoop.io.Text;
 
+/**
+ * 
+ * @author Brad Cutshall
+ * 
+ * Since a composite key is used in Job 2, this comparator is
+ * used to ensure that reducers will get values that are
+ * associated with the same way segment.
+ *
+ */
 public class KeyGroupingComparator extends WritableComparator{
 
 	public KeyGroupingComparator() {

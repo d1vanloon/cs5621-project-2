@@ -5,6 +5,15 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 
+/**
+ * 
+ * @author Brad Cutshall
+ *
+ * Using the a comparator is necessary since we need to perform a 
+ * complex transaction between the mappers and reducers in job 2.
+ * A key during job 2 will be used to reduce way segments by their
+ * id, and also provide sorted input into the reducer.
+ */
 public class CompositeKeyComparator extends WritableComparator {
 
 	public CompositeKeyComparator() {
@@ -12,10 +21,16 @@ public class CompositeKeyComparator extends WritableComparator {
 
 	}
 
+	/**
+	 * Comparator function to compare to incoming keys.
+	 * Output: -1, 0, 1 for -1 for less than, 1 for greater and 0 for equal.
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int compare(WritableComparable k1, WritableComparable k2)
 			throws IndexOutOfBoundsException {
+		
+		// Setup the comparator
 		int index = 0;
 		int compare = -1;
 		Text k1NodeIndex = new Text();
@@ -70,6 +85,7 @@ public class CompositeKeyComparator extends WritableComparator {
 					+ ((Text) k2).toString());
 		}
 
+		// Return a inequality answer.
 		// compareTo:: return (thisValue<thatValue ? -1 : (thisValue==thatValue
 		// ? 0 : 1));
 		// Returns 1 if k2 < k1 = -1, else 1

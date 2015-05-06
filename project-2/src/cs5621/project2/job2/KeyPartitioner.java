@@ -3,6 +3,14 @@ package cs5621.project2.job2;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.io.Text;
 
+/**
+ * 
+ * @author Brad Cutshall
+ * 
+ * With this partitioner we ensure that the values will arrive at
+ * their reducer with their associated way segments.
+ *
+ */
 public class KeyPartitioner extends Partitioner<Text, Text>{
 
 	@Override
