@@ -18,7 +18,6 @@ package cs5621.project2.job3;
  */
 import java.io.IOException;
 import java.util.TreeMap;
-
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -34,15 +33,34 @@ public class Job3Mapper extends Mapper<LongWritable, Text, NullWritable, Text> {
 	@Override
 	public void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
+<<<<<<< HEAD
 		// reads the topN value from arguments and stores it
 		int topN = new Integer(context.getConfiguration().get("topN"));
 		// splits the value on tab space
 		String valPart[] = value.toString().split("\t");
 		// splits it on space
+=======
+
+		// Obtain the user parameter which governs how many top N
+		// roads will be included.
+		int topN = new Integer(context.getConfiguration().get("topN"));
+		
+		// Remove the street name from the incoming value to separate
+		// the rest of the data.
+		String valPart[] = value.toString().split("\t");
+		
+		// We will be sorting by distance, so we remove the distance
+		// from the value string and use this value to sort.
+>>>>>>> 772c8ddfe4899d00aea0b61c92b22d2f1ae5ad78
 		String parts[] = valPart[1].toString().split(" ");
 		// retrieves the distance and stores it
 		Double distance = Double.parseDouble(parts[4]);
+<<<<<<< HEAD
 		// inserts key values pairs into the treemap
+=======
+
+		
+>>>>>>> 772c8ddfe4899d00aea0b61c92b22d2f1ae5ad78
 		topStretch.put(new Double(distance), new Text(value));
 		// compares the map size with topN and if it increases , removes the key
 		// with lowest distance value
